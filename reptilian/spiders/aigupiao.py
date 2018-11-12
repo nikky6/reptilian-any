@@ -69,8 +69,6 @@ class AigupiaoSpider(RedisSpider):
             if not cache.get(key):
                 cache.set(key,str(aigupiao),604800)
                 self.send_msg(aigupiao)
-            else:
-                pass
             yield aigupiao
 
     def get_md(self):
