@@ -67,7 +67,7 @@ class AigupiaoSpider(RedisSpider):
             key = make_md5(str(aigupiao))
             cache = Cache()
             if not cache.get(key):
-                cache.set(key,str(aigupiao))
+                cache.set(key,str(aigupiao),604800)
                 self.send_msg(aigupiao)
             else:
                 pass

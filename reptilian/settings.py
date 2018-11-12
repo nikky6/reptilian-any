@@ -78,6 +78,10 @@ IMAGES_URLS_FIELD = "image_url"
 object_dir = os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE = os.path.join(object_dir, "images")
 
+
+import sys
+sys.path.append(object_dir)
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True
