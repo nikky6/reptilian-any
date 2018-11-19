@@ -60,8 +60,11 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
+# MYEXT_ENABLED=True
+# IDLE_NUMBER  =1
 # EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
+#    # 'scrapy.extensions.telnet.TelnetConsole': None,
+#    #  'reptilian.extensions.RedisSpiderSmartIdleClosedExensions.RedisSpiderSmartIdleClosedExensions': 500,
 # }
 
 # Configure item pipelines
