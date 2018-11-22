@@ -16,6 +16,7 @@ def make_md5(str):
 def get_md():
     url = "https://www.aigupiao.com/Dynamic/others?m_u_id=296904"
     result = requests.get(url)
+    md = ""
     try:
         md = re.findall('var _Libs={"md":"(.*?)"}', result.text, re.S)[0]
     except:
