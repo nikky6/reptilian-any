@@ -35,7 +35,7 @@ class AigupiaoSpider(RedisSpider):
     start_urls = [
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=2&time={}",   # 刀锋投研
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=48&time={}",  # 天策看市
-        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
+        # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=585&time={}", # 居士
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
         "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=699&time={}"  # 龙神
