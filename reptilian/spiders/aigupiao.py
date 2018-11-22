@@ -5,7 +5,7 @@ import requests
 import re, json, time, datetime
 from reptilian.items import CommonItemLoader, AigupiaoItem
 from scrapy_redis.spiders import RedisSpider
-from reptilian.tools.common import make_md5,send_msg,get_md
+from reptilian.tools.common import make_md5,send_msg,get_md,remove_html
 from reptilian.tools.cache import Cache
 
 class AigupiaoSpider(RedisSpider):
@@ -50,7 +50,7 @@ class AigupiaoSpider(RedisSpider):
         result = json.loads(response.text)
         if result.get("rslt", "") == "succ" and result.get("msg_list"):
             for item in result.get("msg_list"):
-                if item.get("kind") == "vip":
+                if item.get("kind") == "vip" or item.get("kind") == "free":
                     oid = item.get("id")
                     url = "https://www.aigupiao.com/api/live.php?act=load_detail&oid={0}&source=pc&md={1}&time={2}".format(oid,get_md(),str((int(round(time.time() * 1000)))))
                     yield Request(url, method='POST', callback=self.single_detail)
@@ -67,14 +67,17 @@ class AigupiaoSpider(RedisSpider):
             aigupiao_loader.add_value("create_time", result["show_detail"][0]['rec_time'])
             aigupiao_loader.add_value("group_name", self.group_list.get(result["show_detail"][0]['g_id'], ""))
 
+
+
+
             aigupiao = aigupiao_loader.load_item()
             key = make_md5(str(aigupiao))
             cache = Cache()
             if not cache.get(key):
                 cache.set(key,str(aigupiao),604800)
                 data = {"msgtype": "text", "text": {
-                    "content": "{}\r{}\r{}\r{}".format(aigupiao.get("create_time", ""), aigupiao.get("title", ""),
-                                                       aigupiao.get("group_name", ""), aigupiao.get("comment", ""))}}
+                    "content": "{}\r{}\r{}\r{}\r{}".format(aigupiao.get("create_time", ""), aigupiao.get("title", ""),
+                                                       aigupiao.get("group_name", ""),remove_html(result["show_detail"][0]['biaoti']), aigupiao.get("comment", ""))}}
                 send_msg(self.msg_url,data)
             yield aigupiao
 
