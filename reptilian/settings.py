@@ -60,12 +60,12 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-# MYEXT_ENABLED=True
-# IDLE_NUMBER  =1
-# EXTENSIONS = {
-#    # 'scrapy.extensions.telnet.TelnetConsole': None,
-#    #  'reptilian.extensions.RedisSpiderSmartIdleClosedExensions.RedisSpiderSmartIdleClosedExensions': 500,
-# }
+MYEXT_ENABLED=True # 是否启用扩展，启用扩展为 True， 不启用为 False
+IDLE_NUMBER  = 6 # 关闭爬虫的持续空闲次数，持续空闲次数超过IDLE_NUMBER，爬虫会被关闭。默认为 360 ，也就是30分钟，一分钟12个时间单位
+EXTENSIONS = {
+   # 'scrapy.extensions.telnet.TelnetConsole': None,
+    'reptilian.extensions.RedisSpiderSmartIdleClosedExensions': 500,
+}
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html

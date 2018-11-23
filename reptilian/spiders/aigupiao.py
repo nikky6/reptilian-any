@@ -43,9 +43,9 @@ class AigupiaoSpider(RedisSpider):
 
     def start_requests(self):
         for url in self.start_urls:
-            yield Request(url.format(get_md(), str((int(round(time.time() * 1000))))), callback=self.single_parse)
+            yield Request(url.format(get_md(), str((int(round(time.time() * 1000))))), callback=self.single_info)
 
-    def single_parse(self, response):
+    def single_info(self, response):
 
         result = json.loads(response.text)
         if result.get("rslt", "") == "succ" and result.get("msg_list"):
