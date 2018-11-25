@@ -31,6 +31,7 @@ class AigupiaoSpider(RedisSpider):
         "24": "轨道埋伏",
         # 龙神
         "140": "默认分组",
+        "716": "默认分组",
         # 天龙八步组
         "584": "天龙八步组",
     }
@@ -81,7 +82,7 @@ class AigupiaoSpider(RedisSpider):
                     "content": "{}\r{}\r{}\r{}\r{}".format(aigupiao.get("create_time", ""), aigupiao.get("title", ""),
                                                        aigupiao.get("group_name", ""),remove_html(result["show_detail"][0]['biaoti']), aigupiao.get("comment", ""))}}
 
-                if result["show_detail"][0]['g_id'] == 140:
+                if result["show_detail"][0]['g_id'] == "716":
                     send_msg(self.msg_url, data)
                 else:
                     send_msg(self.msg_other,data)
