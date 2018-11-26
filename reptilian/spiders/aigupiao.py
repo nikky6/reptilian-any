@@ -32,6 +32,7 @@ class AigupiaoSpider(RedisSpider):
         # 龙神
         "140": "默认分组",
         "716": "默认分组",
+        "0": "默认分组",
         # 天龙八步组
         "584": "天龙八步组",
     }
@@ -39,7 +40,7 @@ class AigupiaoSpider(RedisSpider):
     start_urls = [
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=2&time={}",   # 刀锋投研
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=48&time={}",  # 天策看市
-        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
+        # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=585&time={}", # 居士
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=567&time={}" #姚老哥
@@ -58,6 +59,7 @@ class AigupiaoSpider(RedisSpider):
                 if item.get("kind") == "vip" or item.get("kind") == "free":
                     oid = item.get("id")
                     url = "https://www.aigupiao.com/api/live.php?act=load_detail&oid={0}&source=pc&md={1}&time={2}".format(oid,get_md(),str((int(round(time.time() * 1000)))))
+                    print(url)
                     yield Request(url, method='POST', callback=self.single_detail)
 
     def single_detail(self, response):
@@ -82,10 +84,15 @@ class AigupiaoSpider(RedisSpider):
                     "content": "{}\r{}\r{}\r{}\r{}".format(aigupiao.get("create_time", ""), aigupiao.get("title", ""),
                                                        aigupiao.get("group_name", ""),remove_html(result["show_detail"][0]['biaoti']), aigupiao.get("comment", ""))}}
 
-                if result["show_detail"][0]['g_id'] == "716":
-                    send_msg(self.msg_url, data)
-                else:
-                    send_msg(self.msg_other,data)
+                # if result["show_detail"][0]['g_id'] == "716" or result["show_detail"][0]['g_id'] == "0":
+                #     print("long"*100)
+                #     print(data)
+                #     # send_msg(self.msg_url, data)
+                # else:
+                #     print("other"*100)
+                #     print(data)
+                #     # send_msg(self.msg_other,data)
+                send_msg(self.msg_url, data)
             yield aigupiao
 
 
