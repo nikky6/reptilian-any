@@ -5,11 +5,11 @@ import requests
 import re, json, time, datetime
 from reptilian.items import CommonItemLoader, AigupiaoItem
 from scrapy_redis.spiders import RedisSpider
-from reptilian.tools.common import make_md5,send_msg,get_md,remove_html
+from reptilian.tools.common import make_md5, send_msg, get_md, remove_html
 from reptilian.tools.cache import Cache
 
-class AigupiaoSpider(RedisSpider):
 
+class AigupiaoSpider(RedisSpider):
     name = 'aigupiao'
     redis_key = "aigupiao:start_url"
     allowed_domains = ['aigupiao.com']
@@ -35,35 +35,44 @@ class AigupiaoSpider(RedisSpider):
         "0": "默认分组",
         # 天龙八步组
         "584": "天龙八步组",
+        # 股哥
+        "263": "股哥默认",
+
     }
 
     start_urls = [
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=2&time={}",   # 刀锋投研
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=48&time={}",  # 天策看市
-        # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
+        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=585&time={}", # 居士
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=567&time={}" #姚老哥
         "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=699&time={}",  # 龙神
+        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=177&time={}",  # 股哥
     ]
 
     def start_requests(self):
         for url in self.start_urls:
-            yield Request(url.format(get_md(), str((int(round(time.time() * 1000))))), callback=self.single_info)
+            uid = re.findall('id=(.*)&time', url)[0]
+            yield Request(url.format(get_md(), str((int(round(time.time() * 1000))))), meta={'u_id': uid},
+                          callback=self.single_info)
 
     def single_info(self, response):
 
         result = json.loads(response.text)
+        uid = response.meta['u_id']
+
         if result.get("rslt", "") == "succ" and result.get("msg_list"):
             for item in result.get("msg_list"):
                 if item.get("kind") == "vip" or item.get("kind") == "free":
                     oid = item.get("id")
-                    url = "https://www.aigupiao.com/api/live.php?act=load_detail&oid={0}&source=pc&md={1}&time={2}".format(oid,get_md(),str((int(round(time.time() * 1000)))))
-                    print(url)
-                    yield Request(url, method='POST', callback=self.single_detail)
+                    url = "https://www.aigupiao.com/api/live.php?act=load_detail&oid={0}&source=pc&md={1}&time={2}".format(
+                        oid, get_md(), str((int(round(time.time() * 1000)))))
+                    yield Request(url, method='POST', meta={'u_id': uid}, callback=self.single_detail)
 
     def single_detail(self, response):
         result = json.loads(response.text)
+        uid = response.meta['u_id']
 
         if result.get("rslt", "") == "succ":
             aigupiao_loader = CommonItemLoader(item=AigupiaoItem(), response=response)
@@ -74,30 +83,21 @@ class AigupiaoSpider(RedisSpider):
             aigupiao_loader.add_value("create_time", result["show_detail"][0]['rec_time'])
             aigupiao_loader.add_value("group_name", self.group_list.get(result["show_detail"][0]['g_id'], ""))
 
-
             aigupiao = aigupiao_loader.load_item()
             key = make_md5(str(aigupiao))
             cache = Cache()
             if not cache.get(key):
-                cache.set(key,str(aigupiao),604800)
+                cache.set(key, str(aigupiao), 604800)
                 data = {"msgtype": "text", "text": {
                     "content": "{}\r{}\r{}\r{}\r{}".format(aigupiao.get("create_time", ""), aigupiao.get("title", ""),
-                                                       aigupiao.get("group_name", ""),remove_html(result["show_detail"][0]['biaoti']), aigupiao.get("comment", ""))}}
-
-                # if result["show_detail"][0]['g_id'] == "716" or result["show_detail"][0]['g_id'] == "0":
-                #     print("long"*100)
-                #     print(data)
-                #     # send_msg(self.msg_url, data)
-                # else:
-                #     print("other"*100)
-                #     print(data)
-                #     # send_msg(self.msg_other,data)
-                send_msg(self.msg_url, data)
+                                                           aigupiao.get("group_name", ""),
+                                                           remove_html(result["show_detail"][0]['biaoti']),
+                                                           aigupiao.get("comment", ""))}}
+                if uid == "699":  # 龙神
+                    send_msg(self.msg_url, data)
+                else:
+                    send_msg(self.msg_other, data)
             yield aigupiao
-
-
-
-
 
 
 if __name__ == '__main__':
