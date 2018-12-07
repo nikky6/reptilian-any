@@ -45,7 +45,7 @@ class AigupiaoSpider(RedisSpider):
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=48&time={}",  # 天策看市
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=585&time={}", # 居士
-        # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
+        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=567&time={}" #姚老哥
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=699&time={}",  # 龙神
         "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=177&time={}",  # 股哥
@@ -93,10 +93,10 @@ class AigupiaoSpider(RedisSpider):
                                                            aigupiao.get("group_name", ""),
                                                            remove_html(result["show_detail"][0]['biaoti']),
                                                            aigupiao.get("comment", ""))}}
-                if uid == "699":  # 龙神
-                    send_msg(self.msg_url, data)
-                else:
-                    send_msg(self.msg_other, data)
+                # if uid == "699":  # 龙神
+                #     send_msg(self.msg_url, data)
+                # else:
+                send_msg(self.msg_other, data)
             yield aigupiao
 
 
