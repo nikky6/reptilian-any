@@ -163,8 +163,7 @@ class RandomUserAgentMiddleware(object):
         ]
 
     def process_request(self, request, spider):
-        request.headers.setdefault('User-Agent', random.choice(self.user_agent_list))
-
+        request.headers['User-Agent'] = random.choice(self.user_agent_list)
 
 class RandomUserProxyMiddleware(object):
     def process_request(self, request, spider):

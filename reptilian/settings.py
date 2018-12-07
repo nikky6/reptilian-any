@@ -53,23 +53,23 @@ COOKIES_ENABLED = False
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   # 'reptilian.middlewares.ReptilianDownloaderMiddleware': 543,
-    'reptilian.middlewares.RandomUserAgentMiddleware': 543,
+    # 'reptilian.middlewares.ReptilianDownloaderMiddleware': 543,
     # 'reptilian.middlewares.RandomUserProxyMiddleware': 544,
+    'reptilian.middlewares.RandomUserAgentMiddleware': 545,
 }
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
 MYEXT_ENABLED=True # 是否启用扩展，启用扩展为 True， 不启用为 False
-IDLE_NUMBER  = 6 # 关闭爬虫的持续空闲次数，持续空闲次数超过IDLE_NUMBER，爬虫会被关闭。默认为 360 ，也就是30分钟，一分钟12个时间单位
+IDLE_NUMBER  = 1 # 30秒 关闭爬虫的持续空闲次数，持续空闲次数超过IDLE_NUMBER，爬虫会被关闭。默认为 360 ，也就是30分钟，一分钟12个时间单位
 EXTENSIONS = {
-   # 'scrapy.extensions.telnet.TelnetConsole': None,
     'reptilian.extensions.RedisSpiderSmartIdleClosedExensions': 500,
 }
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
+    # 将Pipeline序列化发送到redis中
     # 'scrapy_redis.pipelines.RedisPipeline': 300
     # 'reptilian.pipelines.JobboleArticPipeline': 300,
     # 'reptilian.pipelines.JobboleImagePipeline': 100,
@@ -80,7 +80,6 @@ ITEM_PIPELINES = {
 IMAGES_URLS_FIELD = "image_url"
 object_dir = os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE = os.path.join(object_dir, "images")
-
 
 import sys
 sys.path.append(object_dir)
@@ -122,6 +121,13 @@ REDIS_PWD       = ""
 USER_AGENR_TYPE = 'chrome'
 
 # scrapy-redis
+# 队列存redis
 SCHEDULER        = "scrapy_redis.scheduler.Scheduler"
+# 队列的类型(先进先出/FifoQueue/PriorityQueue/LifoQueue)
+QUEUE_CLASS      = "scrapy_redis.queue.PriorityQueue"
+# 去重RFPDupeFilter方案
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
+# log (DEBUG\INFO\WARNING\ERROR)
+LOG_FILE  = "scrapy.log"
+LOG_LEVEL = "DEBUG"

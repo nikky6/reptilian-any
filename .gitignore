@@ -9,5 +9,6 @@ eggs
 dbs
 project.egg-info
 twistd.pid
+scrapy.log
 .idea
 reptilian/images

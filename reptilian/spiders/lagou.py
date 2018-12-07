@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+from scrapy_redis.spiders import RedisCrawlSpider
 
 
-class LagouSpider(CrawlSpider):
+class LagouSpider(RedisCrawlSpider):
 
     name = 'lagou'
+    redis_key = 'lagou'
     allowed_domains = ['www.lagou.com']
     start_urls = ['https://www.lagou.com']
 

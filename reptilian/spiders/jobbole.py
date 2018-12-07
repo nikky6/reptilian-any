@@ -5,12 +5,17 @@ from urllib import parse
 from reptilian.items import JobboleArticItem
 from tools.common import make_md5
 from reptilian.items import CommonItemLoader
+from scrapy_redis.spiders import RedisCrawlSpider,RedisSpider
 
 
-class JobboleSpider(scrapy.Spider):
+class JobboleSpider(RedisSpider):
     name = 'jobbole'
+    redis_key = 'jobbole:requests'
     allowed_domains = ['jobbole.com']
-    start_urls = ['http://blog.jobbole.com/all-posts/']
+    # start_urls = ['http://blog.jobbole.com/all-posts/']
+
+    def start_requests(self):
+        yield Request('http://blog.jobbole.com/all-posts/')
 
     def parse(self, response):
         '''
