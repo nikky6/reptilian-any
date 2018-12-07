@@ -47,7 +47,7 @@ class AigupiaoSpider(RedisSpider):
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=585&time={}", # 居士
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=567&time={}" #姚老哥
-        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=699&time={}",  # 龙神
+        # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=699&time={}",  # 龙神
         "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=177&time={}",  # 股哥
     ]
 
