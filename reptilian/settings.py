@@ -55,7 +55,7 @@ COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
     # 'reptilian.middlewares.ReptilianDownloaderMiddleware': 543,
     # 'reptilian.middlewares.RandomUserProxyMiddleware': 544,
-    'reptilian.middlewares.RandomUserAgentMiddleware': 545,
+    # 'reptilian.middlewares.RandomUserAgentMiddleware': 545,
 }
 
 # Enable or disable extensions
@@ -120,14 +120,18 @@ REDIS_PWD       = ""
 # chrom、firefox、ie
 USER_AGENR_TYPE = 'chrome'
 
-# scrapy-redis
-# 队列存redis
+# 调度器队列
 SCHEDULER        = "scrapy_redis.scheduler.Scheduler"
-# 队列的类型(先进先出/FifoQueue/PriorityQueue/LifoQueue)
+'''
+# 队列的类型
+  FifoQueue
+  PriorityQueue
+  LifoQueue
+'''
 QUEUE_CLASS      = "scrapy_redis.queue.PriorityQueue"
-# 去重RFPDupeFilter方案
+# 访问URL去重
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 # log (DEBUG\INFO\WARNING\ERROR)
-LOG_FILE  = "scrapy.log"
-LOG_LEVEL = "DEBUG"
+# LOG_FILE  = "scrapy.log"
+# LOG_LEVEL = "DEBUG"

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import scrapy
 from scrapy import Request
-import requests
-import re, json, time, datetime
+import re, json, time
 from reptilian.items import CommonItemLoader, AigupiaoItem
 from scrapy_redis.spiders import RedisSpider
 from reptilian.tools.common import make_md5, send_msg, get_md, remove_html
@@ -45,7 +43,7 @@ class AigupiaoSpider(RedisSpider):
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=48&time={}",  # 天策看市
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=84&time={}",  # 缠行者
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=585&time={}", # 居士
-        "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
+        # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=57&time={}",   # 涅槃重生
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=567&time={}" #姚老哥
         # "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=699&time={}",  # 龙神
         "https://www.aigupiao.com/api/liver_msg.php?source=pc&act=liver_center&md={}&id=177&time={}",  # 股哥
@@ -73,16 +71,13 @@ class AigupiaoSpider(RedisSpider):
     def single_detail(self, response):
         result = json.loads(response.text)
         uid = response.meta['u_id']
-
         if result.get("rslt", "") == "succ":
             aigupiao_loader = CommonItemLoader(item=AigupiaoItem(), response=response)
-
             aigupiao_loader.add_value("id", result["show_detail"][0]['id'])
             aigupiao_loader.add_value("title", result["show_detail"][0]['title'])
             aigupiao_loader.add_value("comment", result["show_detail"][0]['comment'])
             aigupiao_loader.add_value("create_time", result["show_detail"][0]['rec_time'])
             aigupiao_loader.add_value("group_name", self.group_list.get(result["show_detail"][0]['g_id'], ""))
-
             aigupiao = aigupiao_loader.load_item()
             key = make_md5(str(aigupiao))
             cache = Cache()
@@ -93,9 +88,6 @@ class AigupiaoSpider(RedisSpider):
                                                            aigupiao.get("group_name", ""),
                                                            remove_html(result["show_detail"][0]['biaoti']),
                                                            aigupiao.get("comment", ""))}}
-                # if uid == "699":  # 龙神
-                #     send_msg(self.msg_url, data)
-                # else:
                 send_msg(self.msg_other, data)
             yield aigupiao
 

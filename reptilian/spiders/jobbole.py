@@ -12,7 +12,6 @@ class JobboleSpider(RedisSpider):
     name = 'jobbole'
     redis_key = 'jobbole:requests'
     allowed_domains = ['jobbole.com']
-    # start_urls = ['http://blog.jobbole.com/all-posts/']
 
     def start_requests(self):
         yield Request('http://blog.jobbole.com/all-posts/')
