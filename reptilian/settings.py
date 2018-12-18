@@ -27,10 +27,25 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+
+# 每两个请求之间的间隔
+DOWNLOAD_DELAY=60/40
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
+# 同时最多可以有多少个Pipeline来处理item
+CONCURRENT_ITEMS = 200
+# 并发请求的最大数
+CONCURRENT_REQUESTS = 100
+# 对一个网站的最大并发数
+CONCURRENT_REQUESTS_PER_DOMAIN = 50
+
+# 当访问异常时是否进行重试
+RETRY_ENABLED = True
+# 当遇到以下http状态码时进行重试
+RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 403, 404, 408]
+# 重试次数
+RETRY_TIMES = 5
 
 # Disable cookies (enabled by default)
 COOKIES_ENABLED = False
@@ -54,8 +69,8 @@ COOKIES_ENABLED = False
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     # 'reptilian.middlewares.ReptilianDownloaderMiddleware': 543,
-    # 'reptilian.middlewares.RandomUserProxyMiddleware': 544,
-    # 'reptilian.middlewares.RandomUserAgentMiddleware': 545,
+    'reptilian.middlewares.ProxyMiddleware': 544,
+    'reptilian.middlewares.UserAgentMiddleware': 545,
 }
 
 # Enable or disable extensions
@@ -80,7 +95,6 @@ ITEM_PIPELINES = {
 IMAGES_URLS_FIELD = "image_url"
 object_dir = os.path.abspath(os.path.dirname(__file__))
 IMAGES_STORE = os.path.join(object_dir, "images")
-
 import sys
 sys.path.append(object_dir)
 

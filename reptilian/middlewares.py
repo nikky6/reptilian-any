@@ -106,7 +106,7 @@ class ReptilianDownloaderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class RandomUserAgentMiddleware(object):
+class UserAgentMiddleware(object):
 
     def __init__(self):
         self.user_agent_list = [
@@ -167,7 +167,7 @@ class RandomUserAgentMiddleware(object):
     def process_request(self, request, spider):
         request.headers['User-Agent'] = random.choice(self.user_agent_list)
 
-class RandomUserProxyMiddleware(object):
+class ProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = "http://{}".format(
             requests.get("http://123.207.35.36:5010/get/").content.decode('utf-8'))
