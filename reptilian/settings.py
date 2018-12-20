@@ -69,7 +69,7 @@ COOKIES_ENABLED = False
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     # 'reptilian.middlewares.ReptilianDownloaderMiddleware': 543,
-    'reptilian.middlewares.ProxyMiddleware': 544,
+    # 'reptilian.middlewares.ProxyMiddleware': 544,
     'reptilian.middlewares.UserAgentMiddleware': 545,
 }
 

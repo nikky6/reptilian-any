@@ -11,5 +11,4 @@ PyMySQL==0.8.0
 requests==2.11.0
 selenium==3.12.0
 fake-useragent==0.1.10
-pillow==5.30
 scrapy_redis==0.6.8
